@@ -1,5 +1,6 @@
 #Keegan Gratton
 #INFR 2820U
+#Resources from Lecture slides, https://www.w3schools.com, and stackoverflow.com
 import time
 import sys
 
@@ -48,7 +49,7 @@ def analyzeSortPerformance(data, description, time_complexity):
 #Functiuon to add new product to array
 def addNewProduct(ID,Name,Price,Category):
     product = {
-        'ID': ID,
+        'ID': int(ID),
         'Name': Name,
         'Price': float(Price),
         'Category': Category
@@ -73,6 +74,7 @@ def productDisplay(displayList):
         print(f"Category: {displayList['Category']}")
         print("-" * 30) 
 
+#Search for product by ID number
 def displayProductByID(product_id):
     found_product = None
     for product in products:
@@ -93,7 +95,7 @@ def displayProductByID(product_id):
 
 #Update the data in a array by selecting it with the ID number
 def updateProduct():
-    itemToUpdate = input("Enter the item ID you want to update: ")
+    itemToUpdate = get_valid_integer_input("Enter the item ID you want to update: ")
     found = False
     for product in products:
         if product['ID'] == itemToUpdate:
@@ -107,7 +109,7 @@ def updateProduct():
                 new_name = input("Enter the new name: ")
                 product['Name'] = new_name
             elif updateSelection == "2":
-                new_price = float(input("Enter the new price: "))
+                new_price = get_float_input("Enter the new price: ")
                 product['Price'] = new_price
             elif updateSelection == "3":
                 new_category = input("Enter the new category: ")
@@ -119,9 +121,11 @@ def updateProduct():
     if not found:
         print(f"Product with ID {itemToUpdate} not found.")
 
+
+
 #Delete product using the ID number
 def deleteProduct():
-    itemToDelete = input("Enter the item ID you want to delete: ")
+    itemToDelete = get_valid_integer_input("Enter the item ID you want to delete: ")
     found = False
     for product in products:
         if product['ID'] == itemToDelete:
@@ -131,8 +135,26 @@ def deleteProduct():
             break  # Exit the loop once the product is found
     if not found:
         print(f"Product with ID {itemToDelete} not found.")
+#Check if value entered is a float data type
+def get_float_input(prompt):
+    while True:
+        try:
+            user_input = float(input(prompt))
+            return user_input
+        except ValueError:
+            print("Please enter a valid float.")
 
-    
+#Check if value entered is a int data type       
+def get_valid_integer_input(prompt):
+    while True:
+        try:
+            user_input = int(input(prompt))
+            return user_input
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+
+
+
 #Selection screen runs in loop
 def selectionScreen():
     print("\nWould you like to:\n1.Import from a file\n2.Input manually\n3.Show inventory\n4.Update product\n5.Sort by Product ID and show time complexaity\n6.Delete a product\n7.Search for a product by ID\nQ.Exit\n")
@@ -141,7 +163,7 @@ def selectionScreen():
     if usrSeleciton == "1":
         fileImport(input("Provide the absolute file path: "))
     elif usrSeleciton == "2":
-        addNewProduct(input("What's the ID Number:"),input("Whats the Name of product: "),float(input("What's the price of item: ")),input("What's the category: "))
+        addNewProduct(get_valid_integer_input("What's the ID Number:"),input("Whats the Name of product: "),get_float_input("What's the price of item: "),input("What's the category: "))
     elif usrSeleciton == "3":
         productDisplay(bubbleSort(products))
         
@@ -154,7 +176,7 @@ def selectionScreen():
     elif usrSeleciton == "6":
         deleteProduct()
     elif usrSeleciton == "7":
-        displayProductByID(input("Please enter an ID number to search: "))
+        displayProductByID(get_valid_integer_input("Please enter an ID number to search: "))
     elif usrSeleciton == "Q":
         exit()
     else: 
